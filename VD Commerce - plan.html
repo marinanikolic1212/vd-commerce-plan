@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VD Commerce B2B — PM Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F6F2;
+    --surface: #FFFFFF;
+    --surface2: #F0EFE9;
+    --border: #E2E0D8;
+    --border-strong: #C8C6BC;
+    --text: #1A1917;
+    --text-sec: #6B6963;
+    --text-ter: #9E9C96;
+    --accent: #1A1917;
+    --green: #2D6A2D;
+    --green-bg: #EBF4EB;
+    --amber: #7A4F00;
+    --amber-bg: #FDF3DC;
+    --blue: #0C3A6B;
+    --blue-bg: #E8F1FB;
+    --red: #7A1A1A;
+    --red-bg: #FDEAEA;
+    --radius: 6px;
+    --radius-lg: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-logo {
+    width: 28px; height: 28px;
+    background: var(--text);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: -.5px;
+  }
+  .nav-title { font-size: 14px; font-weight: 500; }
+  .nav-sub { font-size: 11px; color: var(--text-sec); margin-left: 8px; }
+  .nav-tabs { display: flex; gap: 2px; }
+  .tab-btn {
+    padding: 6px 16px;
+    border: none; background: none;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 400;
+    color: var(--text-sec);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .tab-btn:hover { background: var(--surface2); color: var(--text); }
+  .tab-btn.active { background: var(--text); color: var(--bg); font-weight: 500; }
+  .nav-deadline {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    background: var(--red-bg);
+    padding: 4px 10px;
+    border-radius: 99px;
+    border: 1px solid #F0C0C0;
+  }
+
+  /* LAYOUT */
+  .page { display: none; padding: 36px 40px; max-width: 1000px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-ter);
+    margin-bottom: 12px;
+    margin-top: 32px;
+  }
+  .section-title:first-child { margin-top: 0; }
+
+  /* KPI GRID */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 28px; }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+  }
+  .kpi .n { font-size: 28px; font-weight: 600; line-height: 1; font-family: 'DM Mono', monospace; }
+  .kpi .l { font-size: 11px; color: var(--text-sec); margin-top: 5px; }
+  .kpi.highlight { background: var(--text); border-color: var(--text); }
+  .kpi.highlight .n, .kpi.highlight .l { color: var(--bg); }
+
+  /* PROGRESS */
+  .prog-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    margin-bottom: 28px;
+  }
+  .prog-row { display: flex; align-items: center; gap: 12px; }
+  .prog-label { font-size: 12px; color: var(--text-sec); white-space: nowrap; min-width: 140px; }
+  .prog-bar { flex: 1; height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 99px; background: var(--text); transition: width .4s ease; }
+  .prog-pct { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-sec); min-width: 36px; text-align: right; }
+
+  /* ALERT BOX */
+  .alert {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+  }
+  .alert-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .alert.warn { background: var(--amber-bg); border-color: #E8C96A; color: var(--amber); }
+  .alert.info { background: var(--blue-bg); border-color: #A8C8F0; color: var(--blue); }
+
+  /* SPRINT TABLE */
+  .sprint-block { margin-bottom: 28px; }
+  .sprint-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .sprint-name { font-size: 13px; font-weight: 500; }
+  .sprint-range { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-ter); }
+  .tbl-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  thead tr { background: var(--surface2); }
+  th {
+    padding: 9px 14px;
+    font-size: 10px;
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-ter);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr.off-row td { background: var(--surface2); color: var(--text-ter); }
+  tr.work-row:hover td { background: #FAFAF8; }
+  .col-date { width: 110px; }
+  .col-task { width: auto; }
+  .col-who { width: 90px; }
+  .col-status { width: 130px; }
+  .col-note { width: 150px; }
+
+  /* STATUS SELECT */
+  .sel {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 99px;
+    border: 1px solid transparent;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    text-align: center;
+  }
+  .s-done { background: var(--green-bg); color: var(--green); border-color: #B0D8B0; }
+  .s-prog { background: var(--amber-bg); color: var(--amber); border-color: #E8C96A; }
+  .s-todo { background: var(--blue-bg); color: var(--blue); border-color: #A8C8F0; }
+  .s-risk { background: var(--red-bg); color: var(--red); border-color: #F0C0C0; }
+  .s-off  { background: var(--surface2); color: var(--text-ter); }
+
+  .badge {
+    display: inline-block;
+    font-size: 10px; font-weight: 500;
+    padding: 2px 8px; border-radius: 99px;
+    font-family: 'DM Mono', monospace;
+  }
+  .b-done { background: var(--green-bg); color: var(--green); }
+  .b-todo { background: var(--blue-bg); color: var(--blue); }
+  .b-prog { background: var(--amber-bg); color: var(--amber); }
+  .b-risk { background: var(--red-bg); color: var(--red); }
+  .b-off  { background: var(--surface2); color: var(--text-ter); }
+  .b-gray { background: var(--surface2); color: var(--text-sec); border: 1px solid var(--border); }
+
+  .risk-txt { font-size: 11px; color: var(--red); font-weight: 500; }
+  .note-txt { font-size: 11px; color: var(--text-ter); }
+  .date-txt { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; }
+  .task-txt { font-size: 12px; }
+  .task-txt.critical { color: var(--red); }
+  .who-txt { font-size: 11px; color: var(--text-sec); }
+
+  /* LEGEND */
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+  .leg-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-sec); }
+  .leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* QA */
+  .qa-section { margin-bottom: 24px; }
+  .qa-sec-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .qa-sec-title { font-size: 13px; font-weight: 500; }
+  .qa-sec-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-ter); }
+  .qa-list {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .qa-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background .12s;
+  }
+  .qa-row:last-child { border-bottom: none; }
+  .qa-row:hover { background: #FAFAF8; }
+  .qa-row.checked { opacity: .5; }
+  .qa-row.checked .qa-label { text-decoration: line-through; color: var(--text-ter); }
+  .cb {
+    width: 15px; height: 15px; flex-shrink: 0; margin-top: 2px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .12s;
+  }
+  .cb.on { background: var(--text); border-color: var(--text); }
+  .cb.on::after {
+    content: '';
+    display: block;
+    width: 7px; height: 4px;
+    border-left: 1.5px solid var(--bg);
+    border-bottom: 1.5px solid var(--bg);
+    transform: rotate(-45deg) translate(0, -1px);
+  }
+  .qa-label { flex: 1; font-size: 12px; line-height: 1.5; }
+  .pri {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    padding: 2px 7px; border-radius: 99px;
+    flex-shrink: 0; margin-top: 2px;
+    white-space: nowrap;
+  }
+  .p-crit { background: var(--red-bg); color: var(--red); }
+  .p-high { background: var(--amber-bg); color: var(--amber); }
+  .p-med  { background: var(--green-bg); color: var(--green); }
+
+  /* RESET BTN */
+  .btn-outline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 7px 14px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text-sec);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .btn-outline:hover { background: var(--surface2); color: var(--text); border-color: var(--text); }
+
+  /* PLAN OVERVIEW */
+  .task-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .task-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 14px 18px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: start;
+  }
+  .task-card.done-card { opacity: .6; }
+  .task-card-name { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+  .task-card-sub { font-size: 12px; color: var(--text-sec); margin-bottom: 8px; }
+  .task-card-meta { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .task-card-days { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-ter); text-align: right; }
+
+  /* FOOTER */
+  .page-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 10px;
+  }
+  .footer-note { font-size: 11px; color: var(--text-ter); font-family: 'DM Mono', monospace; }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  /* CALENDAR STRIP */
+  .cal-strip {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 40px 20px;
+  }
+  .cal-legend-row {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .cal-leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-sec); cursor: pointer; user-select: none; }
+  .cal-leg-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+  .cal-leg input[type=checkbox] { display: none; }
+  .cal-leg.dim { opacity: .35; }
+  .cal-cols {
+    display: flex; gap: 0; align-items: stretch;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .cal-col {
+    min-width: 82px; max-width: 82px;
+    border-right: 1px solid var(--border);
+    padding: 0 8px 8px;
+    flex-shrink: 0;
+  }
+  .cal-col:first-child { padding-left: 0; }
+  .cal-col:last-child { border-right: none; }
+  .cal-col.off-col { background: none; opacity: .45; }
+  .cal-col.buffer-col { opacity: .6; }
+  .cal-day-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    color: var(--text-ter);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .cal-day-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .cal-col.today-col .cal-day-date {
+    color: var(--surface);
+    background: var(--text);
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .cal-task {
+    font-size: 11px;
+    line-height: 1.35;
+    padding: 4px 6px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    border-left: 2px solid transparent;
+  }
+  .cal-task.cat-auth    { background: #EEF2FF; border-color: #6366F1; color: #3730A3; }
+  .cal-task.cat-katalog { background: #FFF7ED; border-color: #F97316; color: #9A3412; }
+  .cal-task.cat-artikal { background: #F0FDF4; border-color: #22C55E; color: #166534; }
+  .cal-task.cat-pretraga{ background: #FFF1F2; border-color: #FB7185; color: #9F1239; }
+  .cal-task.cat-korpa   { background: #FDF4FF; border-color: #C084FC; color: #6B21A8; }
+  .cal-task.cat-narudzbina { background: #ECFDF5; border-color: #10B981; color: #065F46; }
+  .cal-task.cat-korisnici  { background: #FFF8F1; border-color: #F59E0B; color: #78350F; }
+  .cal-task.cat-finansije  { background: #F0F9FF; border-color: #38BDF8; color: #0C4A6E; }
+  .cal-task.cat-buffer     { background: var(--surface2); border-color: var(--border-strong); color: var(--text-sec); font-style: italic; }
+  .cal-off-label {
+    font-size: 10px; color: var(--text-ter);
+    font-style: italic; margin-top: 6px;
+  }
+
+  /* PRINT */
+  @media print {
+    .nav-tabs, .page:not(.active) { display: none !important; }
+    .page.active { padding: 20px; }
+    .cal-strip { border-bottom: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">VD</div>
+    <span class="nav-title">VD Commerce B2B</span>
+    <span class="nav-sub">PM Hub</span>
+  </div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>
+    <button class="tab-btn" onclick="switchTab('plan')">Plan po danima</button>
+    <button class="tab-btn" onclick="switchTab('qa')">QA Checklist</button>
+  </div>
+  <div class="nav-deadline">Rok: Pon 01.06.2026.</div>
+</nav>
+
+<!-- ===================== CALENDAR STRIP ===================== -->
+<div class="cal-strip" id="cal-strip">
+  <div class="cal-legend-row">
+    <span style="font-size:11px;font-weight:500;color:var(--text-sec);margin-right:4px;">Moduli:</span>
+    <label class="cal-leg" data-cat="cat-auth"><span class="cal-leg-dot" style="background:#6366F1"></span>Auth</label>
+    <label class="cal-leg" data-cat="cat-katalog"><span class="cal-leg-dot" style="background:#F97316"></span>Katalog</label>
+    <label class="cal-leg" data-cat="cat-artikal"><span class="cal-leg-dot" style="background:#22C55E"></span>Artikal</label>
+    <label class="cal-leg" data-cat="cat-pretraga"><span class="cal-leg-dot" style="background:#FB7185"></span>Pretraga</label>
+    <label class="cal-leg" data-cat="cat-korpa"><span class="cal-leg-dot" style="background:#C084FC"></span>Korpa</label>
+    <label class="cal-leg" data-cat="cat-narudzbina"><span class="cal-leg-dot" style="background:#10B981"></span>Narudžbine</label>
+    <label class="cal-leg" data-cat="cat-korisnici"><span class="cal-leg-dot" style="background:#F59E0B"></span>Korisnici</label>
+    <label class="cal-leg" data-cat="cat-finansije"><span class="cal-leg-dot" style="background:#38BDF8"></span>Finansije</label>
+  </div>
+  <div class="cal-cols" id="cal-cols"></div>
+</div>
+
+<!-- ===================== DASHBOARD ===================== -->
+<div class="page active" id="page-dashboard">
+
+  <div class="section-title">Pregled projekta</div>
+
+  <div class="kpi-grid">
+    <div class="kpi highlight"><div class="n" id="d-pct">18%</div><div class="l">Ukupan napredak</div></div>
+    <div class="kpi"><div class="n" id="d-done">2</div><div class="l">Završeno</div></div>
+    <div class="kpi"><div class="n" id="d-prog">1</div><div class="l">U toku</div></div>
+    <div class="kpi"><div class="n" id="d-todo">8</div><div class="l">Preostalo</div></div>
+  </div>
+
+  <div class="prog-block">
+    <div class="prog-row">
+      <span class="prog-label">Napredak projekta</span>
+      <div class="prog-bar"><div class="prog-fill" id="d-prog-fill" style="width:18%"></div></div>
+      <span class="prog-pct" id="d-pct-lbl">18%</span>
+    </div>
+    <div class="prog-row" style="margin-top:10px">
+      <span class="prog-label">QA testiranje</span>
+      <div class="prog-bar"><div class="prog-fill" id="qa-prog-fill" style="width:0%"></div></div>
+      <span class="prog-pct" id="qa-pct-lbl">0%</span>
+    </div>
+  </div>
+
+  <div class="alert warn">
+    <span class="alert-icon">⚠</span>
+    <div><strong>Kritičan period: 27–29. maj</strong><br>U posljednja 3 radna dana pada najveći broj taskova. Obavezno pratiti napredak Andreja svakog dana od 25. maja.</div>
+  </div>
+
+  <div class="alert info">
+    <span class="alert-icon">ℹ</span>
+    <div><strong>Slobodni dani: 21. i 22. maj (četvrtak i petak)</strong><br>Plan uzima ove dane u obzir. Ukupno 12 radnih dana od danas do roka.</div>
+  </div>
+
+  <div class="section-title">Taskovi</div>
+
+  <div class="task-cards" id="d-task-cards"></div>
+
+  <div class="section-title">Tim</div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Osoba</th><th>Uloga</th><th>Status</th><th>Napomena</th></tr></thead>
+      <tbody>
+        <tr class="work-row">
+          <td><strong>Andrej</strong></td>
+          <td class="note-txt">Frontend developer</td>
+          <td><span class="badge b-prog">Aktivan</span></td>
+          <td class="note-txt">Jedini developer od 18.05. — svi taskovi na njemu</td>
+        </tr>
+        <tr class="work-row">
+          <td><strong>Danijel</strong></td>
+          <td class="note-txt">Frontend developer</td>
+          <td><span class="badge b-done">Odradio osnovu</span></td>
+          <td class="note-txt">Postavio B2B strukturu, layout, nav, katalog osnovu</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ===================== PLAN PO DANIMA ===================== -->
+<div class="page" id="page-plan">
+
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Završeno</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--amber)"></div>U toku</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Nije početo</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Rizično</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--text-ter)"></div>Slobodan dan</div>
+  </div>
+
+  <div id="plan-sprints"></div>
+
+  <div class="page-footer">
+    <span class="footer-note">VD Commerce B2B — Plan po danima · Rok 01.06.2026.</span>
+    <button class="btn-outline" onclick="window.print()">Štampaj plan</button>
+  </div>
+</div>
+
+<!-- ===================== QA CHECKLIST ===================== -->
+<div class="page" id="page-qa">
+
+  <div class="kpi-grid">
+    <div class="kpi highlight"><div class="n" id="qa-pct-kpi">0%</div><div class="l">QA napredak</div></div>
+    <div class="kpi"><div class="n" id="qa-done">0</div><div class="l">Testirano</div></div>
+    <div class="kpi"><div class="n" id="qa-left">0</div><div class="l">Preostalo</div></div>
+    <div class="kpi"><div class="n" id="qa-total">0</div><div class="l">Ukupno stavki</div></div>
+  </div>
+
+  <div class="prog-block">
+    <div class="prog-row">
+      <span class="prog-label">Napredak testiranja</span>
+      <div class="prog-bar"><div class="prog-fill" id="qa-main-fill" style="width:0%"></div></div>
+      <span class="prog-pct" id="qa-main-pct">0%</span>
+    </div>
+  </div>
+
+  <div class="alert info">
+    <span class="alert-icon">ℹ</span>
+    <div>Testiraj svaki modul čim Andrej završi implementaciju — ne čekaj kraj maja. Klikni stavku da je označiš kao testiranu.</div>
+  </div>
+
+  <div id="qa-sections"></div>
+
+  <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+    <button class="btn-outline" onclick="resetQA()">Resetuj sve</button>
+    <button class="btn-outline" onclick="window.print()">Štampaj checklist</button>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-note">VD Commerce B2B — QA Checklist · Rok Pon 01.06.2026.</span>
+  </div>
+</div>
+
+<script>
+// ========= DATA =========
+
+const SPRINTS = [
+  {
+    name: 'Sprint 1 — Osnova i katalog',
+    range: '14.05. – 15.05.',
+    days: [
+      {date:'Čet 14.05.', task:'B2B struktura + katalog artikala — početak', who:'Dan. & Andrej', def:'prog', risk:false, note:'Katalog u toku'},
+      {date:'Pet 15.05.', task:'Katalog artikala — nastavak i stilovi', who:'Andrej', def:'todo', risk:false, note:''},
+    ]
+  },
+  {
+    name: 'Sprint 2 — Katalog završetak + prikaz artikla',
+    range: '18.05. – 20.05.',
+    days: [
+      {date:'Pon 18.05.', task:'Katalog artikala — završetak + sprint review', who:'Andrej', def:'todo', risk:false, note:'Review obavezan'},
+      {date:'Uto 19.05.', task:'Prikaz artikla — početak (detalji, slike, kol.)', who:'Andrej', def:'todo', risk:false, note:''},
+      {date:'Sri 20.05.', task:'Prikaz artikla — završetak + dodaj u korpu', who:'Andrej', def:'todo', risk:false, note:''},
+    ]
+  },
+  {
+    name: 'Slobodni dani',
+    range: '21.05. – 22.05.',
+    days: [
+      {date:'Čet 21.05.', task:'SLOBODAN DAN', who:'—', def:'off', risk:false, note:'Neradni dan'},
+      {date:'Pet 22.05.', task:'SLOBODAN DAN', who:'—', def:'off', risk:false, note:'Neradni dan'},
+    ]
+  },
+  {
+    name: 'Sprint 3 — Pretraga, filteri i korpa',
+    range: '25.05. – 27.05.',
+    days: [
+      {date:'Pon 25.05.', task:'Napredna pretraga + filteri + sortiranje', who:'Andrej', def:'todo', risk:false, note:'Složen task — pun dan'},
+      {date:'Uto 26.05.', task:'Korpa: empty state + selekcija tipa (rez./narudž.)', who:'Andrej', def:'todo', risk:false, note:''},
+      {date:'Sri 27.05.', task:'Korpa narudžbine + korpa rezervacije', who:'Andrej', def:'todo', risk:true, note:'2 ekrana u 1 danu'},
+    ]
+  },
+  {
+    name: 'Sprint 4 — Narudžbine, profil, finansije — KRITIČNO',
+    range: '28.05. – 29.05.',
+    days: [
+      {date:'Čet 28.05.', task:'Kreiranje narudžbine + moj profil + podaci', who:'Andrej', def:'todo', risk:true, note:'Kritičan dan'},
+      {date:'Pet 29.05.', task:'Finansije + dugovanje + korisnici + prava pristupa + lokacije', who:'Andrej', def:'todo', risk:true, note:'Najviše taskova — rizik'},
+    ]
+  }
+];
+
+const ALL_TASKS = [
+  {name:'Login stranica', sub:'Google, email/pass, forgot password', def:'done', assignee:'Andrej'},
+  {name:'B2B osnovna struktura', sub:'Layout, nav, topbar, rute, constants', def:'done', assignee:'Danijel'},
+  {name:'Katalog artikala', sub:'Listanje, grid/tabela, DataTable integracija', def:'prog', assignee:'Andrej'},
+  {name:'Prikaz artikla', sub:'Detaljna stranica, slike, količina, dodaj u korpu', def:'todo', assignee:'Andrej'},
+  {name:'Napredna pretraga i filteri', sub:'Filteri, sortiranje, statusni filteri, dostupnost', def:'todo', assignee:'Andrej'},
+  {name:'Korpa — empty state i selekcija tipa', sub:'Prazna korpa + izbor: rezervacija ili narudžbina', def:'todo', assignee:'Andrej'},
+  {name:'Korpa za narudžbine', sub:'Pregled, izmjena količine, confirm flow', def:'todo', assignee:'Andrej'},
+  {name:'Korpa za rezervacije', sub:'Isti UI flow, drugačija logika potvrde', def:'todo', assignee:'Andrej'},
+  {name:'Kreiranje narudžbine', sub:'Checkout flow, potvrda, success state', def:'todo', assignee:'Andrej'},
+  {name:'Moj profil i podaci', sub:'Izmjena ličnih podataka', def:'todo', assignee:'Andrej'},
+  {name:'Finansije i dugovanje', sub:'Stranica finansija + dugovanje prikaz', def:'todo', assignee:'Andrej'},
+  {name:'Korisnici, prava pristupa i lokacije', sub:'Dodavanje korisnika, role, edit lokacija', def:'todo', assignee:'Andrej'},
+];
+
+const QA_DATA = [
+  {
+    title: 'Autentifikacija',
+    items: [
+      {t:'Login sa email i lozinkom radi ispravno', p:'crit'},
+      {t:'Login putem Google naloga funkcioniše', p:'crit'},
+      {t:'Forgot password šalje mejl i reset link radi', p:'crit'},
+      {t:'Reset lozinke — novi password se može koristiti', p:'high'},
+      {t:'Poruke greške su jasne (pogrešan pass, nepostojeći mejl)', p:'high'},
+      {t:'Redirect nakon logina vodi na ispravnu stranicu', p:'high'},
+      {t:'Logout čisti sesiju i vraća na login', p:'crit'},
+    ]
+  },
+  {
+    title: 'Katalog artikala',
+    items: [
+      {t:'Artikli se učitavaju i prikazuju ispravno', p:'crit'},
+      {t:'Paginacija ili infinite scroll radi bez grešaka', p:'high'},
+      {t:'Slike artikala se učitavaju (nema broken image)', p:'high'},
+      {t:'Naziv, cijena i šifra artikla su vidljivi', p:'crit'},
+      {t:'Klik na artikal vodi na stranicu detalja', p:'crit'},
+      {t:'Prazno stanje (nema artikala) je vizualno riješeno', p:'med'},
+    ]
+  },
+  {
+    title: 'Prikaz artikla',
+    items: [
+      {t:'Sve informacije o artiklu su prisutne (naziv, opis, cijena, šifra)', p:'crit'},
+      {t:'Unos količine radi — ne može se unijeti 0 ili negativan broj', p:'crit'},
+      {t:'Dugme "Dodaj u korpu" aktivira se tek kad je količina > 0', p:'crit'},
+      {t:'Toast/notifikacija se pojavljuje nakon dodavanja u korpu', p:'high'},
+      {t:'Broj u ikoni korpe se ažurira u real-timeu', p:'high'},
+      {t:'Galerija slika (ako postoji) funkcioniše ispravno', p:'med'},
+    ]
+  },
+  {
+    title: 'Napredna pretraga i filteri',
+    items: [
+      {t:'Search input pretražuje po nazivu i šifri artikla', p:'crit'},
+      {t:'Filteri se primjenjuju i rezultati se ažuriraju', p:'crit'},
+      {t:'Sortiranje (cijena, naziv, dostupnost) radi ispravno', p:'high'},
+      {t:'Filter po statusu artikla radi (dostupan/nije)', p:'high'},
+      {t:'Filteri se mogu resetovati/obrisati', p:'high'},
+      {t:'Kombinacija više filtera odjednom daje ispravne rezultate', p:'crit'},
+      {t:'Prazno stanje pretrage je vizualno riješeno', p:'med'},
+    ]
+  },
+  {
+    title: 'Korpa',
+    items: [
+      {t:'Empty state korpe izgleda ispravno na početku', p:'high'},
+      {t:'Artikli dodati iz kataloga se pojavljuju u korpi', p:'crit'},
+      {t:'Količina se može mijenjati direktno u korpi', p:'high'},
+      {t:'Artikal se može ukloniti iz korpe', p:'high'},
+      {t:'Selekcija tipa (rezervacija ili narudžbina) je jasna i obavezna', p:'crit'},
+      {t:'Nije moguće nastaviti bez odabira tipa', p:'crit'},
+      {t:'Ukupna suma se ispravno izračunava', p:'crit'},
+      {t:'Korpa za narudžbine ima ispravan confirm flow', p:'crit'},
+      {t:'Korpa za rezervacije ima ispravan confirm flow', p:'crit'},
+    ]
+  },
+  {
+    title: 'Kreiranje narudžbine',
+    items: [
+      {t:'Checkout flow se može završiti od početka do kraja', p:'crit'},
+      {t:'Potvrda narudžbine prikazuje ispravne podatke', p:'crit'},
+      {t:'Success state je vizualno jasan i sadržajan', p:'high'},
+      {t:'Narudžbina se pojavljuje u listi nakon kreiranja', p:'crit'},
+      {t:'Greška pri kreiranju je jasno prikazana korisniku', p:'high'},
+    ]
+  },
+  {
+    title: 'Finansije i dugovanje',
+    items: [
+      {t:'Stranica finansija se učitava i prikazuje ispravne podatke', p:'crit'},
+      {t:'Stranica dugovanja prikazuje ispravno stanje', p:'crit'},
+      {t:'Iznosi su ispravno formatirani (valuta, decimale)', p:'high'},
+      {t:'Prazno stanje finansija je riješeno (nema JS grešaka)', p:'med'},
+    ]
+  },
+  {
+    title: 'Profil i upravljanje korisnicima',
+    items: [
+      {t:'Stranica profila prikazuje ispravne podatke korisnika', p:'crit'},
+      {t:'Izmjena podataka se može sačuvati', p:'crit'},
+      {t:'Dodavanje novog korisnika radi ispravno', p:'crit'},
+      {t:'Prava pristupa se mogu dodijeliti i izmijeniti', p:'crit'},
+      {t:'Edit lokacija funkcioniše i čuva promjene', p:'high'},
+      {t:'Validacija forme (obavezna polja, format mejla) radi', p:'high'},
+    ]
+  },
+  {
+    title: 'Opšti UI i cross-browser test',
+    items: [
+      {t:'Sve stranice rade u Chrome-u', p:'crit'},
+      {t:'Sve stranice rade u Firefox-u', p:'high'},
+      {t:'Sve stranice rade u Safari-ju', p:'high'},
+      {t:'Prikaz je ispravan na desktop rezoluciji (1280px+)', p:'crit'},
+      {t:'Nema vidljivih CSS grešaka ili overflow-a na elementima', p:'high'},
+      {t:'Loading/skeleton stanja su implementirana gdje treba', p:'med'},
+      {t:'Nema console.error grešaka pri normalnom korištenju', p:'high'},
+      {t:'Sve navigacijske rute rade i 404 je riješen', p:'high'},
+      {t:'Sesija istekla — korisnik se preusmjeri na login', p:'high'},
+    ]
+  },
+];
+
+// ========= STATE =========
+const taskStatuses = JSON.parse(localStorage.getItem('vdc_tasks') || '{}');
+const planStatuses = JSON.parse(localStorage.getItem('vdc_plan') || '{}');
+const qaChecks = JSON.parse(localStorage.getItem('vdc_qa2') || '{}');
+
+function saveAll() {
+  try {
+    localStorage.setItem('vdc_tasks', JSON.stringify(taskStatuses));
+    localStorage.setItem('vdc_plan', JSON.stringify(planStatuses));
+    localStorage.setItem('vdc_qa2', JSON.stringify(qaChecks));
+  } catch(e) {}
+}
+
+// ========= HELPERS =========
+const SEL_COLORS = {
+  done: {bg:'#EBF4EB', color:'#2D6A2D', border:'#B0D8B0'},
+  prog: {bg:'#FDF3DC', color:'#7A4F00', border:'#E8C96A'},
+  todo: {bg:'#E8F1FB', color:'#0C3A6B', border:'#A8C8F0'},
+  risk: {bg:'#FDEAEA', color:'#7A1A1A', border:'#F0C0C0'},
+};
+function applySelStyle(el, s) {
+  const c = SEL_COLORS[s] || SEL_COLORS.todo;
+  el.style.background = c.bg;
+  el.style.color = c.color;
+  el.style.borderColor = c.border;
+}
+
+// ========= RECALC =========
+function recalcAll() {
+  // Plan tasks
+  let done=0, prog=0, todo=0;
+  ALL_TASKS.forEach((t,i) => {
+    const s = taskStatuses[i] || t.def;
+    if(s==='done') done++;
+    else if(s==='prog') prog++;
+    else todo++;
+  });
+  const total = done+prog+todo;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('d-done').textContent = done;
+  document.getElementById('d-prog').textContent = prog;
+  document.getElementById('d-todo').textContent = todo;
+  document.getElementById('d-pct').textContent = pct+'%';
+  document.getElementById('d-pct-lbl').textContent = pct+'%';
+  document.getElementById('d-prog-fill').style.width = pct+'%';
+
+  // QA
+  let qd=0, qt=0;
+  QA_DATA.forEach(sec=>sec.items.forEach((_,j)=>{
+    const key=sec.title+'|'+j; qt++;
+    if(qaChecks[key]) qd++;
+  }));
+  const qpct = qt ? Math.round(qd/qt*100) : 0;
+  document.getElementById('qa-pct-lbl').textContent = qpct+'%';
+  document.getElementById('qa-prog-fill').style.width = qpct+'%';
+  document.getElementById('qa-pct-kpi').textContent = qpct+'%';
+  document.getElementById('qa-done').textContent = qd;
+  document.getElementById('qa-left').textContent = qt-qd;
+  document.getElementById('qa-total').textContent = qt;
+  document.getElementById('qa-main-fill').style.width = qpct+'%';
+  document.getElementById('qa-main-pct').textContent = qpct+'%';
+
+  // Sprint counts
+  SPRINTS.forEach(sp => {
+    sp.days.forEach(d => {
+      if(d.def==='off') return;
+      const sc = document.getElementById('sc-'+d.date);
+      if(sc) {
+        const s = planStatuses[d.date] || d.def;
+        const badge = sc.querySelector('.badge');
+        if(badge) {
+          badge.textContent = {done:'Završeno',prog:'U toku',todo:'Nije početo',risk:'Rizično'}[s]||'Nije početo';
+          badge.className = 'badge '+{done:'b-done',prog:'b-prog',todo:'b-todo',risk:'b-risk'}[s];
+        }
+      }
+    });
+  });
+}
+
+// ========= RENDER DASHBOARD TASKS =========
+function renderDashTasks() {
+  const cont = document.getElementById('d-task-cards');
+  cont.innerHTML = '';
+  ALL_TASKS.forEach((t, i) => {
+    const s = taskStatuses[i] || t.def;
+    const card = document.createElement('div');
+    card.className = 'task-card' + (s==='done' ? ' done-card' : '');
+
+    const left = document.createElement('div');
+    left.innerHTML = `<div class="task-card-name">${t.name}</div><div class="task-card-sub">${t.sub}</div>`;
+    const meta = document.createElement('div');
+    meta.className = 'task-card-meta';
+
+    const sel = document.createElement('select');
+    sel.className = 'sel';
+    [['done','Završeno'],['prog','U toku'],['todo','Nije početo'],['risk','Rizično']].forEach(([v,l])=>{
+      const o = document.createElement('option');
+      o.value=v; o.textContent=l;
+      if(v===s) o.selected=true;
+      sel.appendChild(o);
+    });
+    applySelStyle(sel, s);
+    sel.addEventListener('change', function(){
+      taskStatuses[i] = this.value;
+      saveAll();
+      applySelStyle(this, this.value);
+      card.className = 'task-card' + (this.value==='done' ? ' done-card' : '');
+      recalcAll();
+    });
+
+    const who = document.createElement('span');
+    who.className = 'badge b-gray';
+    who.textContent = t.assignee;
+
+    meta.appendChild(sel);
+    meta.appendChild(who);
+    left.appendChild(meta);
+
+    const right = document.createElement('div');
+    right.className = 'task-card-days';
+
+    card.appendChild(left);
+    card.appendChild(right);
+    cont.appendChild(card);
+  });
+}
+
+// ========= RENDER PLAN =========
+function renderPlan() {
+  const cont = document.getElementById('plan-sprints');
+  cont.innerHTML = '';
+
+  SPRINTS.forEach(sp => {
+    const block = document.createElement('div');
+    block.className = 'sprint-block';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'sprint-header';
+    hdr.innerHTML = `<span class="sprint-name">${sp.name}</span><span class="sprint-range">${sp.range}</span>`;
+    block.appendChild(hdr);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'tbl-wrap';
+    const tbl = document.createElement('table');
+    const thead = document.createElement('thead');
+    thead.innerHTML = `<tr>
+      <th class="col-date">Datum</th>
+      <th class="col-task">Zadatak</th>
+      <th class="col-who">Ko radi</th>
+      <th class="col-status">Status</th>
+      <th class="col-note">Napomena</th>
+    </tr>`;
+    tbl.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    sp.days.forEach(d => {
+      const isOff = d.def === 'off';
+      const s = isOff ? 'off' : (planStatuses[d.date] || d.def);
+      const tr = document.createElement('tr');
+      tr.className = isOff ? 'off-row' : 'work-row';
+
+      const tdDate = document.createElement('td');
+      tdDate.innerHTML = `<span class="date-txt">${d.date}</span>`;
+
+      const tdTask = document.createElement('td');
+      const span = document.createElement('span');
+      span.className = 'task-txt' + (d.risk ? ' critical' : '');
+      span.textContent = d.task;
+      tdTask.appendChild(span);
+
+      const tdWho = document.createElement('td');
+      tdWho.innerHTML = `<span class="who-txt">${d.who}</span>`;
+
+      const tdStat = document.createElement('td');
+      tdStat.id = 'sc-'+d.date;
+      if(isOff) {
+        tdStat.innerHTML = '<span class="badge b-off">Slobodan dan</span>';
+      } else {
+        const sel = document.createElement('select');
+        sel.className = 'sel';
+        [['done','Završeno'],['prog','U toku'],['todo','Nije početo'],['risk','Rizično']].forEach(([v,l])=>{
+          const o = document.createElement('option');
+          o.value=v; o.textContent=l;
+          if(v===s) o.selected=true;
+          sel.appendChild(o);
+        });
+        applySelStyle(sel, s);
+        sel.addEventListener('change', function(){
+          planStatuses[d.date] = this.value;
+          saveAll();
+          applySelStyle(this, this.value);
+          recalcAll();
+        });
+        tdStat.appendChild(sel);
+      }
+
+      const tdNote = document.createElement('td');
+      if(isOff && (d.date.includes('21') || d.date.includes('22'))) {
+        tdNote.innerHTML = '<span class="risk-txt">Planiran slobodan</span>';
+      } else if(d.risk) {
+        tdNote.innerHTML = `<span class="risk-txt">⚠ ${d.note}</span>`;
+      } else {
+        tdNote.innerHTML = `<span class="note-txt">${d.note || '—'}</span>`;
+      }
+
+      tr.appendChild(tdDate);
+      tr.appendChild(tdTask);
+      tr.appendChild(tdWho);
+      tr.appendChild(tdStat);
+      tr.appendChild(tdNote);
+      tbody.appendChild(tr);
+    });
+
+    tbl.appendChild(tbody);
+    wrap.appendChild(tbl);
+    block.appendChild(wrap);
+    cont.appendChild(block);
+  });
+}
+
+// ========= RENDER QA =========
+function renderQA() {
+  const cont = document.getElementById('qa-sections');
+  cont.innerHTML = '';
+  QA_DATA.forEach(sec => {
+    const div = document.createElement('div');
+    div.className = 'qa-section';
+
+    const hdr = document.createElement('div');
+    hdr.className = 'qa-sec-header';
+    const secDone = sec.items.filter((_,j) => qaChecks[sec.title+'|'+j]).length;
+    hdr.innerHTML = `<span class="qa-sec-title">${sec.title}</span><span class="qa-sec-count" id="qsc-${sec.title}">${secDone}/${sec.items.length}</span>`;
+    div.appendChild(hdr);
+
+    const list = document.createElement('div');
+    list.className = 'qa-list';
+
+    sec.items.forEach((item, j) => {
+      const key = sec.title+'|'+j;
+      const row = document.createElement('div');
+      row.className = 'qa-row' + (qaChecks[key] ? ' checked' : '');
+
+      const cb = document.createElement('div');
+      cb.className = 'cb' + (qaChecks[key] ? ' on' : '');
+
+      const lbl = document.createElement('span');
+      lbl.className = 'qa-label';
+      lbl.textContent = item.t;
+
+      const pri = document.createElement('span');
+      pri.className = 'pri p-'+item.p;
+      pri.textContent = {crit:'Kritično',high:'Visoko',med:'Srednje'}[item.p];
+
+      row.appendChild(cb);
+      row.appendChild(lbl);
+      row.appendChild(pri);
+
+      row.addEventListener('click', () => {
+        qaChecks[key] = !qaChecks[key];
+        saveAll();
+        cb.classList.toggle('on', qaChecks[key]);
+        row.classList.toggle('checked', qaChecks[key]);
+        const sc = document.getElementById('qsc-'+sec.title);
+        if(sc) {
+          const d2 = sec.items.filter((_,jj) => qaChecks[sec.title+'|'+jj]).length;
+          sc.textContent = d2+'/'+sec.items.length;
+        }
+        recalcAll();
+      });
+
+      list.appendChild(row);
+    });
+
+    div.appendChild(list);
+    cont.appendChild(div);
+  });
+}
+
+function resetQA() {
+  Object.keys(qaChecks).forEach(k => delete qaChecks[k]);
+  saveAll();
+  renderQA();
+  recalcAll();
+}
+
+// ========= TAB SWITCHING =========
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ========= CALENDAR STRIP =========
+const CAL_COLS_DATA = [
+  {
+    day:'PON', date:'14.05.', today:true, off:false,
+    tasks:[
+      {label:'B2B osnovna\nstruktura', cat:'cat-katalog'},
+      {label:'Katalog —\npocetak', cat:'cat-katalog'},
+    ]
+  },
+  {
+    day:'PET', date:'15.05.', today:false, off:false,
+    tasks:[
+      {label:'Katalog —\nnastavak', cat:'cat-katalog'},
+      {label:'Stilovi\ntabele', cat:'cat-katalog'},
+    ]
+  },
+  {
+    day:'PON', date:'18.05.', today:false, off:false,
+    tasks:[
+      {label:'Katalog —\nzavrsetak', cat:'cat-katalog'},
+      {label:'Sprint\nreview', cat:'cat-katalog'},
+    ]
+  },
+  {
+    day:'UTO', date:'19.05.', today:false, off:false,
+    tasks:[
+      {label:'Prikaz artikla\n— pocetak', cat:'cat-artikal'},
+      {label:'Detalji +\nslike', cat:'cat-artikal'},
+    ]
+  },
+  {
+    day:'SRI', date:'20.05.', today:false, off:false,
+    tasks:[
+      {label:'Prikaz artikla\n— zavrsetak', cat:'cat-artikal'},
+      {label:'Dodaj\nu korpu', cat:'cat-artikal'},
+    ]
+  },
+  {
+    day:'CET', date:'21.05.', today:false, off:true,
+    tasks:[]
+  },
+  {
+    day:'PET', date:'22.05.', today:false, off:true,
+    tasks:[]
+  },
+  {
+    day:'PON', date:'25.05.', today:false, off:false,
+    tasks:[
+      {label:'Napredna\npretraga', cat:'cat-pretraga'},
+      {label:'Filteri +\nsortiranje', cat:'cat-pretraga'},
+    ]
+  },
+  {
+    day:'UTO', date:'26.05.', today:false, off:false,
+    tasks:[
+      {label:'Korpa —\nempty state', cat:'cat-korpa'},
+      {label:'Selekcija\ntipa', cat:'cat-korpa'},
+    ]
+  },
+  {
+    day:'SRI', date:'27.05.', today:false, off:false,
+    tasks:[
+      {label:'Korpa\nnarudzbi', cat:'cat-korpa'},
+      {label:'Korpa\nrezervacija', cat:'cat-korpa'},
+    ]
+  },
+  {
+    day:'CET', date:'28.05.', today:false, off:false,
+    tasks:[
+      {label:'Kreiranje\nnarudzbi', cat:'cat-narudzbina'},
+      {label:'Moj profil\n+ podaci', cat:'cat-korisnici'},
+    ]
+  },
+  {
+    day:'PET', date:'29.05.', today:false, off:false,
+    tasks:[
+      {label:'Finansije +\ndugovanje', cat:'cat-finansije'},
+      {label:'Korisnici\n+ prava', cat:'cat-korisnici'},
+      {label:'Edit\nlokacija', cat:'cat-korisnici'},
+    ]
+  },
+  {
+    day:'PON', date:'01.06.', today:false, off:false, buffer:true,
+    tasks:[
+      {label:'Buffer /\nBugfixevi', cat:'cat-buffer'},
+      {label:'Finalni\nreview', cat:'cat-buffer'},
+      {label:'Predaja\nprojekta', cat:'cat-buffer'},
+    ]
+  },
+];
+
+function renderCalendar() {
+  const cont = document.getElementById('cal-cols');
+  cont.innerHTML = '';
+  CAL_COLS_DATA.forEach(col => {
+    const div = document.createElement('div');
+    div.className = 'cal-col' + (col.off ? ' off-col' : '') + (col.today ? ' today-col' : '') + (col.buffer ? ' buffer-col' : '');
+
+    const dayName = document.createElement('div');
+    dayName.className = 'cal-day-name';
+    dayName.textContent = col.day;
+
+    const dayDate = document.createElement('div');
+    dayDate.className = 'cal-day-date';
+    dayDate.textContent = col.date;
+
+    div.appendChild(dayName);
+    div.appendChild(dayDate);
+
+    if(col.off) {
+      const lbl = document.createElement('div');
+      lbl.className = 'cal-off-label';
+      lbl.textContent = 'Slobodan dan';
+      div.appendChild(lbl);
+    } else {
+      col.tasks.forEach(t => {
+        const task = document.createElement('div');
+        task.className = 'cal-task ' + t.cat;
+        task.textContent = t.label.replace(/\\n/g, '\n');
+        task.style.whiteSpace = 'pre-line';
+        div.appendChild(task);
+      });
+    }
+
+    cont.appendChild(div);
+  });
+
+  // Legend toggle
+  document.querySelectorAll('.cal-leg').forEach(leg => {
+    leg.addEventListener('click', () => {
+      const cat = leg.getAttribute('data-cat');
+      const tasks = document.querySelectorAll('.cal-task.'+cat);
+      const isDim = leg.classList.toggle('dim');
+      tasks.forEach(t => t.style.display = isDim ? 'none' : '');
+    });
+  });
+}
+
+// ========= INIT =========
+renderCalendar();
+renderDashTasks();
+renderPlan();
+renderQA();
+recalcAll();
+</script>
+</body>
+</html>
